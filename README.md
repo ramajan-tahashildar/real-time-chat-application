@@ -1,237 +1,245 @@
-[![Fork Button](https://img.shields.io/github/forks/iemafzalhassan/full-stack_chatApp?style=social)](https://github.com/iemafzalhassan/full-stack_chatApp/fork)
-
-
 # Real-Time Chat Application
 
+A full-stack, real-time chat application built with **React**, **Node.js**, **Express**, **MongoDB**, **Socket.io**, and **Kubernetes**. This project demonstrates modern web development practices, including authentication, real-time messaging, containerization, and orchestration.
 
-Welcome to the **Full Stack Realtime Chat App** project, where we're building a scalable and secure real-time chat experience using the latest technologies. Whether you're a seasoned developer or a beginner, we invite you to contribute and be a part of this exciting journey!
+---
 
 ## Table of Contents
 
+- [Features](#features)
+- [Architecture](#architecture)
+- [Tech Stack](#tech-stack)
+- [Project Structure](#project-structure)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Environment Variables](#environment-variables)
+  - [Running Locally](#running-locally)
+  - [Docker Usage](#docker-usage)
+  - [Kubernetes Deployment](#kubernetes-deployment)
+- [Usage](#usage)
+- [Contributing](#contributing)
+- [License](#license)
 
-* [Introduction](#introduction)
-* [Features](#features)
-* [Tech Stack](#tech-stack)
-* [Getting Started](#getting-started)
-* [Building the Backend](#building-the-backend)
-* [Running the Application](#running-the-application)
-* [Contributing](#contributing)
-* [Future Plans](#future-plans)
-* [License](#license)
+---
 
-## 📝 Introduction
+## Features
 
-This project aims to provide a real-time chat experience that's both scalable and secure. With a focus on modern technologies, we're building an application that's easy to use and maintain.
+- **Real-time Messaging:** Instant chat using Socket.io.
+- **User Authentication:** Secure login/signup with JWT and hashed passwords.
+- **Profile Management:** Users can upload and update their profile pictures.
+- **Online Status:** See which users are online in real-time.
+- **Modern UI:** Responsive interface with React, TailwindCSS, and DaisyUI.
+- **Containerization:** Docker support for both frontend and backend.
+- **Orchestration:** Kubernetes manifests for scalable deployment.
+- **State Management:** Zustand for frontend state.
+- **API Security:** Uses HTTP-only cookies and CORS.
 
-## ✨ Features
+---
 
+## Architecture
 
-* **Real-time Messaging**: Send and receive messages instantly using Socket.io 
-* **User Authentication & Authorization**: Securely manage user access with JWT 
-* **Scalable & Secure Architecture**: Built to handle large volumes of traffic and data 
-* **Modern UI Design**: A user-friendly interface crafted with React and TailwindCSS 
-* **Profile Management**: Users can upload and update their profile pictures 
-* **Online Status**: View real-time online/offline status of users 
+- **Frontend:** React SPA served by Nginx, communicates with backend via REST API and Socket.io.
+- **Backend:** Express server with REST endpoints and Socket.io for real-time communication.
+- **Database:** MongoDB for persistent storage.
+- **Containerization:** Dockerfiles for both frontend and backend.
+- **Orchestration:** Kubernetes manifests for deployments, services, ingress, and persistent storage.
 
+---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
+- **Frontend:** React, Vite, TailwindCSS, DaisyUI, Zustand, React Router, Lucide Icons
+- **Backend:** Node.js, Express, MongoDB, Mongoose, Socket.io, JWT, Cloudinary (for image uploads)
+- **DevOps:** Docker, Kubernetes, Nginx
 
-* **Backend:** Node.js, Express, MongoDB, Socket.io
-* **Frontend:** React, TailwindCSS
-* **Containerization:** Docker
-* **Orchestration:** Kubernetes (planned)
-* **Web Server:** Nginx
-* **State Management:** Zustand
-* **Authentication:** JWT
-* **Styling Components:** DaisyUI
+---
 
+## Project Structure
 
-### 🔧 Prerequisites
-
-
-* **[Node.js](https://nodejs.org/)** (v14 or higher)
-* **[Docker](https://www.docker.com/get-started)** (for containerizing the app)
-* **[Git](https://git-scm.com/downloads)** (to clone the repository)
-
-
-### 📝 Setup .env File
-
-
-1. Navigate to the `backend` directory:
-```bash
-cd backend
 ```
-2. Create a `.env` file and add the following content (modify the values as needed):
+chat-application/
+├── backend/
+│   ├── src/
+│   │   ├── controllers/
+│   │   ├── lib/
+│   │   ├── middleware/
+│   │   ├── models/
+│   │   ├── routes/
+│   │   └── index.js
+│   ├── Dockerfile
+│   └── package.json
+├── frontend/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── pages/
+│   │   ├── store/
+│   │   ├── lib/
+│   │   └── App.jsx
+│   ├── public/
+│   ├── Dockerfile
+│   ├── nginx.conf
+│   └── package.json
+├── k8s/
+│   ├── backend-deployment.yml
+│   ├── backend-service.yml
+│   ├── frontend-deployment.yml
+│   ├── frontend-service.yml
+│   ├── ingress.yml
+│   ├── mongoDB-deployment.yml
+│   ├── mongoDB-pv.yml
+│   ├── mongoDB-pvc.yml
+│   ├── mongoDB-service.yml
+│   └── namespace.yml
+├── README.md
+└── package.json
+```
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+- [Node.js](https://nodejs.org/) (v14+)
+- [Docker](https://www.docker.com/get-started)
+- [Kubernetes](https://kubernetes.io/) (for orchestration)
+- [MongoDB](https://www.mongodb.com/) (local or Docker)
+
+### Environment Variables
+
+Create a `.env` file in the `backend/` directory:
+
 ```env
 MONGODB_URI=mongodb://mongo:27017/chatapp
 JWT_SECRET=your_jwt_secret_key
 PORT=5001
-```
-    > **Note:** Replace `your_jwt_secret_key` with a strong secret key of your choice.
-
-### Clone the Repository
-
-```bash
-git clone https://github.com/iemafzalhassan/full-stack_chatApp.git
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_api_key
+CLOUDINARY_API_SECRET=your_api_secret
 ```
 
-🏗️ Build and Run the Application
+> Replace the Cloudinary variables with your own if you want to enable image uploads.
 
-Follow these steps to build and run the application:
+### Running Locally
 
-1. Build & Run the Containers:
+#### 1. Clone the repository
 
-```bash
-cd full-stack_chatApp
-```
-```bash
-docker-compose up -d --build
+```sh
+git clone https://github.com/yourusername/chat-application.git
+cd chat-application
 ```
 
-2. Access the application in your browser:
+#### 2. Install dependencies
 
-```
-http://localhost
-```
----
-
-## 🛠️ Getting Started
-
-Follow these simple steps to get the project up and running on your local Host using docker.
-
-```bash
-git clone https://github.com/iemafzalhassan/full-stack_chatApp.git
+```sh
+cd backend && npm install
+cd ../frontend && npm install
 ```
 
-```bash
-cd full-stack_chatApp
-```
-## Create a Docker network:
+#### 3. Start MongoDB
 
-```bash
-docker network create full-stack
-```
+- Locally: `mongod`
+- Or with Docker:  
+  `docker run -d -p 27017:27017 --name mongo mongo:latest`
 
-## 🛠️ Building the Frontend
+#### 4. Start Backend
 
-```bash
-cd frontend
-```
-
-```bash
-docker build -t full-stack_frontend .
-```
-
-### Run the Frontend container:
-
-```bash
-docker run -d --network=full-stack  -p 5173:5173 --name frontend full-stack_frontend:latest
-```
-#### The frontend will now be accessible on port 5173.
-
-
-## Run the MongoDB Container:
-
-```bash
-docker run -d -p 27017:27017 --name mongo mongo:latest
-```
----
-
-## 🛠️ Building the Backend
-
-```bash
+```sh
 cd backend
+npm run dev
 ```
 
-### Build the Backend image:
+#### 5. Start Frontend
 
-```bash
-docker build -t full-stack_backend .
+```sh
+cd frontend
+npm run dev
 ```
 
-### Run the Backend container:
-
-```bash
-docker run -d --network=full-stack --add-host=host.docker.internal:host-gateway -p 5001:5001 --env-file .env full-stack_backend
-```
-#### This will build and run the backend container, exposing the backendAPI on port 5001.
-
-`Backend API: http://localhost:5001`
-
-### To Verify the conncetion between backend and databse:
-```bash
-docker-compose logs -f
-```
-
-### Once the backend and frontend containers are running, you can access the application in your browser:
-
-`Frontend: http://localhost`
-
-
-You can now interact with the real-time chat app and start messaging!
+- Frontend: [http://localhost:5173](http://localhost:5173)
+- Backend API: [http://localhost:5001/api](http://localhost:5001/api)
 
 ---
 
+### Docker Usage
 
+#### Build and Run with Docker Compose
 
-### 🤝 Contributing
+You can use Docker Compose (add a `docker-compose.yml` if needed) or run containers manually:
 
+```sh
+# Build images
+docker build -t chat-frontend ./frontend
+docker build -t chat-backend ./backend
 
-We welcome contributions from DevOps & Developer of all skill levels! Here's how you can contribute:
+# Create network
+docker network create chat-net
 
-**Report bugs:** If you encounter any bugs or issues, please open an issue with detailed information.
-**Suggest features:** Have an idea for a new feature? Open an issue to discuss it with the community.
-**Submit pull requests:** If you have a fix or a feature you'd like to contribute, submit a pull request. Ensure your changes pass any linting or tests, if applicable.
+# Run MongoDB
+docker run -d --network=chat-net --name mongo mongo:latest
 
-### 🌐 Join the Community
+# Run Backend
+docker run -d --network=chat-net --env-file ./backend/.env -p 5001:5001 --name backend chat-backend
 
-We invite you to join our community of developers and contributors. Let's work together to build an amazing real-time chat application!
-
-* **Star this repository** to show your support
-* **Fork this repository** to contribute to the project
-* **Open an issue** to report bugs or suggest features
-* **Submit a pull request** to contribute code changes
-
-## 🔮 Future Plans
-
-
-This project is evolving, and here are a few exciting things on the horizon:
-
-* [ ] **CI/CD Pipelines:** Implement Continuous Integration and Continuous Deployment pipelines to automate testing and deployment.
-* [ ] **Kubernetes (K8s):** Add Kubernetes manifests for container orchestration to deploy the app on cloud platforms like AWS, GCP, or Azure.
-* [ ] **Feature Expansion:** Add more features like group chats, media sharing, and user status updates.
-* **Stay tuned for updates as we continue to improve and expand this project!**
+# Run Frontend
+docker run -d --network=chat-net -p 5173:80 --name frontend chat-frontend
+```
 
 ---
 
-## 📚 Project Snapshots:
+### Kubernetes Deployment
 
-![Settings](frontend/public/settings.png)
+1. Make sure your cluster is running and `kubectl` is configured.
+2. Apply the namespace:
 
-![chat](frontend/public/chat.png)
+   ```sh
+   kubectl apply -f k8s/namespace.yml
+   ```
 
-![logout](/frontend/public/logout.png)
+3. Deploy MongoDB (PV, PVC, Deployment, Service):
 
-![Login](/frontend/public/login.png)
+   ```sh
+   kubectl apply -f k8s/mongoDB-pv.yml
+   kubectl apply -f k8s/mongoDB-pvc.yml
+   kubectl apply -f k8s/mongoDB-deployment.yml
+   kubectl apply -f k8s/mongoDB-service.yml
+   ```
 
+4. Deploy Backend and Frontend:
 
+   ```sh
+   kubectl apply -f k8s/backend-deployment.yml
+   kubectl apply -f k8s/backend-service.yml
+   kubectl apply -f k8s/frontend-deployment.yml
+   kubectl apply -f k8s/frontend-service.yml
+   ```
 
-## 📜 License
+5. Deploy Ingress (update host as needed):
 
+   ```sh
+   kubectl apply -f k8s/ingress.yml
+   ```
 
-This project is licensed under the MIT License. See the LICENSE file for more details.
+---
 
+## Usage
 
+- **Sign Up:** Create a new account.
+- **Login:** Access your chat dashboard.
+- **Chat:** Select a user from the sidebar and start messaging in real-time.
+- **Profile:** Update your profile picture and view account info.
+- **Settings:** Change the chat theme.
 
+---
 
+## Contributing
 
+Contributions are welcome! Please open issues and submit pull requests for improvements or bug fixes.
 
+---
 
+## License
 
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
-
-
-
-
-
+---
