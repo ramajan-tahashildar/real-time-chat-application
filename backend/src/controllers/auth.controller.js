@@ -6,12 +6,15 @@ import cloudinary from "../lib/cloudinary.js";
 export const signup = async (req, res) => {
   const { fullName, email, password } = req.body;
   try {
+    // console.log("signup controller", req.body);
     if (!fullName || !email || !password) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
     if (password.length < 6) {
-      return res.status(400).json({ message: "Password must be at least 6 characters" });
+      return res
+        .status(400)
+        .json({ message: "Password must be at least 6 characters" });
     }
 
     const user = await User.findOne({ email });
@@ -26,6 +29,7 @@ export const signup = async (req, res) => {
       email,
       password: hashedPassword,
     });
+    console.log("new user", newUser);
 
     if (newUser) {
       // generate jwt token here
@@ -88,13 +92,16 @@ export const logout = (req, res) => {
 export const updateProfile = async (req, res) => {
   try {
     const { profilePic } = req.body;
+
     const userId = req.user._id;
 
     if (!profilePic) {
       return res.status(400).json({ message: "Profile pic is required" });
     }
 
-    const uploadResponse = await cloudinary.uploader.upload(profilePic);
+    // const uploadResponse = await cloudinary.uploader.upload(profilePic);
+    const uploadResponse = profilePic;
+    // console.log("profile pic", uploadResponse);
     const updatedUser = await User.findByIdAndUpdate(
       userId,
       { profilePic: uploadResponse.secure_url },

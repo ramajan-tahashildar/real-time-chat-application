@@ -1,0 +1,12 @@
+kind: PersistentVolume 
+apiVersion: v1 
+metadata:
+    name: chat-application-mongodb-pv
+spec:
+    storageClassName: local-storage
+    capacity:
+        storage: 5Gi
+    accessModes:
+        - ReadWriteOnce
+    hostPath:
+        path: /data/mongodb
